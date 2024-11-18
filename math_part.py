@@ -7,25 +7,25 @@ from time import sleep
 def temp_by_elev(height):
     # temperature depending by elevating
     if (0 <= height <= 3000):
-        temperature = 288.2 - 3.2 * height / 1000
+        temperature = 288.2 - 3.2 * height * 1e-3
     elif (3000 <= height <= 11000):
-        temperature = 268.7 - 6.5 * (height / 1000 - 3)
+        temperature = 268.7 - 6.5 * (height * 1e-3 - 3)
     elif (11000 <= height <= 20000):
         temperature = 216.7
     elif (20000 <= height <= 32000):
-        temperature = 216.7 + (height / 1000 - 20)
+        temperature = 216.7 + (height * 1e-3 - 20)
     elif (32000 <= height <= 40000):
-        temperature = 228.5 + 2.75 * (height / 1000 - 32)
+        temperature = 228.5 + 2.75 * (height * 1e-3 - 32)
     elif (40000 <= height <= 50000):
-        temperature = 250.4 + 2 * (height / 1000 - 40)
+        temperature = 250.4 + 2 * (height * 1e-3 - 40)
     elif (50000 <= height <= 60000):
-        temperature = 270.7 - 2.3 * (height / 1000 - 50)
+        temperature = 270.7 - 2.3 * (height * 1e-3 - 50)
     elif (60000 <= height <= 80000):
-        temperature = 247 - 2.45 * (height / 1000 - 60)
+        temperature = 247 - 2.45 * (height * 1e-3 - 60)
     elif (80000 <= height <= 100_000):
-        temperature = 198.6 - 0.1 * (height / 1000 - 80)
+        temperature = 198.6 - 0.1 * (height * 1e-3 - 80)
     elif (100_000 <= height <= 150_000):
-        temperature = 196.6 + 8.62 * (height / 1000 - 100)
+        temperature = 196.6 + 8.62 * (height * 1e-3 - 100)
     else:
         temperature = 627.6
     return temperature
