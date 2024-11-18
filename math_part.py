@@ -52,7 +52,7 @@ engine_works = True
 booster_detached = False
 # a = (F тяги / m) - g - F сопрот
 for i in range(1, int(10e4)):
-    if (height <= 100 and not(engine_works)):
+    if (height <= 500 and not(engine_works)):
         break
     if (height >= 42400):
         engine_works = False
@@ -74,8 +74,8 @@ for i in range(1, int(10e4)):
             acceleration = -g + (env_resistance_force / mass)
     speed += k * acceleration
     height += k * speed
-    if (not(booster_detached) and height >= 106500):
-        mass = 6000
+    if (not(booster_detached) and height >= 106500 and speed <= 10):
+        mass = 5500
         booster_detached = True
         Cf = 1.15
     # sleep(0.5)
