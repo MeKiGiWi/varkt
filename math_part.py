@@ -77,10 +77,10 @@ for i in range(1, int(10e4)):
     if (not(booster_detached) and height >= 106500 and speed <= 10):
         mass = 5500
         booster_detached = True
-        Cf = 1.15
+        Cf = 1.17
     # sleep(0.5)
     # print(cur_time, speed, acceleration, height)
-    database.append([cur_time, speed, acceleration, height, temperature])
+    database.append([cur_time, acceleration, speed, height, temperature, atm_pressure, env_density, env_resistance_force, g, mass, mass * g])
     if (not engine_works and height <= 20000 and not parachutes_open_20000):
         parachutes_open_20000 = True 
         area += parachutes_square_20000 * 1.136
