@@ -15,17 +15,17 @@ def main():
     altitude = connection.add_stream(getattr, vessel.flight(), "mean_altitude")
     vessel.control.sas = True
     vessel.control.throttle = 1.0
-    print(vessel.dry_mass)
     while (connection):
         relative_time = cur_time() - start_time
-        print(relative_time, altitude(), vessel.mass, vessel.mass - vessel.dry_mass)
+        ref_frame = vessel.orbit.body.reference_frame
+        print(relative_time, altitude(), vessel.mass, vessel.mass - vessel.dry_mass, vessel.flight(ref_frame).speed)
         sleep(0.25)
         if (altitude() >= 41500):
             vessel.control.throttle = 0
         if (altitude() >= 100000 and vessel.flight().vertical_speed <= 10):
             karmen_line = True
             vessel.control.activate_next_stage()
-        database.append([relative_time, altitude(), vessel.flight().vertical_speed, vessel.flight().drag / vessel.mass])
+        database.append([relative_time, altitude(), vessel.flight(ref_frame).speed])
         if (karmen_line and altitude() < 300):
             connection = False
 
