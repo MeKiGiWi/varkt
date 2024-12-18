@@ -1,12 +1,11 @@
-import scipy.constants as cons
+"""making data for our_data.json using dynamic steps"""
 import json
 import math
-from time import sleep
+import scipy.constants as cons
 
 
 # константные данные
 START_MASS = 41_400
-CF = 0.42
 PUSH_FORCE = 490_000
 NU = 0.029
 PARACHUTES_AREA_20000 = 3 * pow(0.65, 2) * cons.pi
@@ -43,6 +42,7 @@ def temperatureByElevation(height):
 
 def main():
     # cтартовые данные
+    Cf = 0.42
     height = 0
     speed = 0
     current_area = pow(1.95, 2) * cons.pi
@@ -66,7 +66,7 @@ def main():
         temperature = temperatureByElevation(height)
         atm_pressure = ATM_PRESSURE_ON_EARTH * math.exp(-NU * g * height / (cons.R * temperature)) # current atmosphere pressure 
         env_density = NU * atm_pressure / (cons.R * temperature)
-        env_resistance_force = current_area * env_density * pow(speed, 2) * 0.5 * CF
+        env_resistance_force = current_area * env_density * pow(speed, 2) * 0.5 * Cf
         # a = (F тяги / m) - g - (F сопрот / m)
         if (engine_works):
             acceleration = (PUSH_FORCE / mass) - g - (env_resistance_force / mass)
@@ -78,7 +78,7 @@ def main():
         if (not(booster_detached) and height >= 106500 and speed <= 10):
             mass = 5500
             booster_detached = True
-            CF = 1.17
+            Cf = 1.17
         if (not engine_works and height <= 20000 and not parachutes_open_20000):
             parachutes_open_20000 = True 
             current_area += PARACHUTES_AREA_20000 * 1.136

@@ -1,6 +1,7 @@
-import krpc 
+"""live flight parser"""
 from time import sleep
 from json import dump
+import krpc 
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
         if (karmen_line and altitude() < 300):
             connection = False
 
-    with open('data.json', 'w') as f:
+    with open('data.json', 'w', encoding='UTF-8') as f:
         dump(database, f)
 
 
