@@ -25,7 +25,7 @@ def main():
         if (altitude() >= 100000 and vessel.flight().vertical_speed <= 10):
             karmen_line = True
             vessel.control.activate_next_stage()
-        database.append([relative_time, altitude()])
+        database.append([relative_time, altitude(), vessel.flight().vertical_speed, vessel.flight().drag / vessel.mass])
         if (karmen_line and altitude() < 300):
             connection = False
 
