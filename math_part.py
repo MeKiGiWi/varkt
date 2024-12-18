@@ -4,7 +4,7 @@ import math
 from time import sleep
 
 
-def temp_by_elev(height):
+def temperatureByElevation(height):
     # temperature depending by elevating
     if (0 <= height <= 3000):
         temperature = 288.2 - 3.2 * height * 1e-3
@@ -34,58 +34,58 @@ def temp_by_elev(height):
 # cтартовые данные
 height = 0
 speed = 0
-start_mass = 41_400
+current_area = pow(1.95, 2) * cons.pi
 acceleration = 0
 # константные данные
-Cf = 0.42
-push_force = 490_000
-area = pow(1.95, 2) * cons.pi
-nu = 0.029
-parachutes_square_20000 = 3 * pow(0.65, 2) * cons.pi
-parachutes_square_2000 = 3 * pow(1.95, 2) * cons.pi - parachutes_square_20000
-atm_pressure_on_earth = 101_325
+START_MASS = 41_400
+CF = 0.42
+PUSH_FORCE = 490_000
+NU = 0.029
+PARACHUTES_AREA_20000 = 3 * pow(0.65, 2) * cons.pi
+PARACHUTES_AREA_2000 = 3 * pow(1.95, 2) * cons.pi - PARACHUTES_AREA_20000
+ATM_PRESSURE_ON_EARTH = 101_325
 # вспомогательные переменные
 database = []
 parachutes_open_20000 = False
 parachutes_open_2000 = False
 engine_works = True
 booster_detached = False
-# a = (F тяги / m) - g - F сопрот
 for i in range(1, int(10e4)):
     if (height <= 500 and not(engine_works)):
         break
     if (height >= 42400):
         engine_works = False
-    k = 0.25
-    cur_time = k * i # current second
+    K = 0.25
+    cur_time = K * i # current second
     if (engine_works):
-        mass = start_mass - cur_time * 228 # current mass
+        mass = START_MASS - cur_time * 228 # current mass
     g = cons.G * 5.9722 * 1e24 / pow(6378100 + height, 2) # current gravity acceleration 
-    temperature = temp_by_elev(height)
-    atm_pressure = atm_pressure_on_earth * math.exp(-nu * g * height / (cons.R * temperature)) # current atmosphere pressure 
-    env_density = nu * atm_pressure / (cons.R * temperature)
-    env_resistance_force = area * env_density * pow(speed, 2) * 0.5 * Cf
+    temperature = temperatureByElevation(height)
+    atm_pressure = ATM_PRESSURE_ON_EARTH * math.exp(-NU * g * height / (cons.R * temperature)) # current atmosphere pressure 
+    env_density = NU * atm_pressure / (cons.R * temperature)
+    env_resistance_force = current_area * env_density * pow(speed, 2) * 0.5 * CF
+    # a = (F тяги / m) - g - (F сопрот / m)
     if (engine_works):
-        acceleration = (push_force / mass) - g - (env_resistance_force / mass)
+        acceleration = (PUSH_FORCE / mass) - g - (env_resistance_force / mass)
     else:
         if speed > 0:
             acceleration = -g - (env_resistance_force / mass)
         else:
             acceleration = -g + (env_resistance_force / mass)
-    speed += k * acceleration
-    height += k * speed
     if (not(booster_detached) and height >= 106500 and speed <= 10):
         mass = 5500
         booster_detached = True
-        Cf = 1.17
-    # sleep(0.5)
-    # print(cur_time, speed, acceleration, height)
-    database.append([cur_time, acceleration, speed, height, temperature, atm_pressure, env_density, env_resistance_force, g, mass, mass * g])
+        CF = 1.17
     if (not engine_works and height <= 20000 and not parachutes_open_20000):
         parachutes_open_20000 = True 
-        area += parachutes_square_20000 * 1.136
+        current_area += PARACHUTES_AREA_20000 * 1.136
     if (not engine_works and height <= 2000 and not parachutes_open_2000):
         parachutes_open_2000 = True 
-        area += parachutes_square_2000 * 1.136
-with open('our_data.json', 'w') as f:
+        current_area += PARACHUTES_AREA_2000 * 1.136
+
+    height += (acceleration * K ** 2) / 2 + speed * K
+    speed += K * acceleration
+    database.append([cur_time, acceleration, speed, height, temperature, atm_pressure, env_density, env_resistance_force, g, mass, mass * g])
+
+with open('our_data.json', 'w', encoding="UTF-8") as f:
     json.dump(database, f)
