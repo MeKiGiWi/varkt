@@ -4,6 +4,16 @@ import math
 from time import sleep
 
 
+# константные данные
+START_MASS = 41_400
+CF = 0.42
+PUSH_FORCE = 490_000
+NU = 0.029
+PARACHUTES_AREA_20000 = 3 * pow(0.65, 2) * cons.pi
+PARACHUTES_AREA_2000 = 3 * pow(1.95, 2) * cons.pi - PARACHUTES_AREA_20000
+ATM_PRESSURE_ON_EARTH = 101_325
+
+
 def temperatureByElevation(height):
     # temperature depending by elevating
     if (0 <= height <= 3000):
@@ -37,14 +47,6 @@ def main():
     speed = 0
     current_area = pow(1.95, 2) * cons.pi
     acceleration = 0
-    # константные данные
-    START_MASS = 41_400
-    CF = 0.42
-    PUSH_FORCE = 490_000
-    NU = 0.029
-    PARACHUTES_AREA_20000 = 3 * pow(0.65, 2) * cons.pi
-    PARACHUTES_AREA_2000 = 3 * pow(1.95, 2) * cons.pi - PARACHUTES_AREA_20000
-    ATM_PRESSURE_ON_EARTH = 101_325
     # вспомогательные переменные
     database = []
     parachutes_open_20000 = False
